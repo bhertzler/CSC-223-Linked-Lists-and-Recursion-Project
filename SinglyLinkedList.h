@@ -183,6 +183,7 @@ public:
 	{
 		if (head == nullptr)
 			throw EmptyListException();
+		std::cout << "Head -> ";
 		Node<T>* p = head;
 		while (p != nullptr)
 		{
@@ -192,10 +193,42 @@ public:
 		std::cout << "nullptr" << std::endl;
 	}
 
+	// Function to display the list in reverse order.
+	// Postcondition: Displays the value of each
+	// info field starting with the last node and
+	// ending with the first node
+	// If the list is empty, an exception is thrown
+	//
+	void reversePrint() throw (EmptyListException)
+	{
+		if (head == nullptr)
+			throw EmptyListException();
+		reversePrint(head);
+		std::cout << "Head" << std::endl;
+	}
+
 	// Function to return the total number of elements in the list.
 	size_t length() const { return size; }
 
 private:
+	// Private Member Functions
+
+	// Private recursive function to display the list in reverse order
+	//		(Recursive overload of the public reversePrint function)
+	//
+	void reversePrint(Node<T>* p)
+	{
+		if (p != nullptr)
+		{
+			reversePrint(p->next);
+			std::cout << p->data << " <- ";
+		}
+		else
+			std::cout << "nullptr <- ";
+	}
+
+	// Private Instance Variables
+
 	Node<T>* head;			// Pointer to the first node
 	Node<T>* tail;			// Pointer to the last node
 	size_t size;			// Total number of elements in the list
