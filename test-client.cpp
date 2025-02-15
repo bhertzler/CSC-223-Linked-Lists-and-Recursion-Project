@@ -1,4 +1,4 @@
-// test-client.cpp: test program for the SinglyLinkedList class, this file contains the main() function.
+// test-client.cpp: test program for the SinglyLinkedList class, this file contains the 'main' function.
 //
 
 // Benjamin Hertzler
@@ -7,59 +7,60 @@
 //
 
 #include "SinglyLinkedList.h"
+#include "SplitLinkedList.h"
+#include <string>
 #include <iostream>
 using namespace std;
 
 int main()
 {
-	SinglyLinkedList<int> fwd_list;
-	SinglyLinkedList<int> bck_list;
+	SplitLinkedList list;
+	SinglyLinkedList<int> evens;
+	SinglyLinkedList<int> odds;
+
+	string input;
+	cout << "Enter a list of integers, enter '.' to finish." << endl;
+	cin >> input;
+	while (input != ".")
+	{
+		for (char ch : input)
+		{
+			if (!isdigit(ch))
+			{
+				cerr << "Invalid Input." << endl;
+				return -1;
+			}
+		}
+		list.insertAtEnd(stoi(input));
+		cin >> input;
+	}
+
+	cout << "Your List (" << list.length() << " items): ";
+	try { list.print(); }
+	catch (SinglyLinkedList<int>::EmptyListException e)
+	{
+		cout << e.what() << endl;
+		return 0;
+	}
+
 	
-	// Build Backward
-	for (int i = 1; i < 6; i++)
+
+	list.splitEvensOdds(evens, odds);
+
+	cout << "Evens List (" << evens.length() << " items): ";
+	evens.print();
+
+	cout << "Odds List(" << odds.length() << " items): ";
+	odds.print();
+
+	cout << "List (" << list.length() << " items): ";
+	try { list.print(); }
+	catch (SinglyLinkedList<int>::EmptyListException e)
 	{
-		int num = i * 10;
-		bck_list.insertAtBeginning(num);
+		cout << e.what() << endl;
+		return 0;
 	}
-	cout << "Backward List: " << endl;
-	bck_list.print();
 
-	// Delete first element
-	bck_list.deleteNode(50);
-	cout << "Delete the first node: " << endl;
-	bck_list.print();
-
-	// Delete last element
-	bck_list.deleteNode(10);
-	cout << "Delete the last node: " << endl;
-	bck_list.print();
-
-	// Delete interior element
-	bck_list.deleteNode(30);
-	cout << "Delete the middle node: " << endl;
-	bck_list.print();
-
-	// Build Forward
-	for (int i = 1; i < 6; i++)
-	{
-		int num = i * 10;
-		fwd_list.insertAtEnd(num);
-	}
-	cout << "Forward List: " << endl;
-	fwd_list.print();
-
-	// Delete the first element
-	fwd_list.deleteNode(10);
-	cout << "Delete the first node: " << endl;
-	fwd_list.print();
-
-	// Delete last element
-	fwd_list.deleteNode(50);
-	cout << "Delete the last node: " << endl;
-	fwd_list.print();
-
-	// Delete interior element
-	fwd_list.deleteNode(30);
-	cout << "Delete the middle node: " << endl;
-	fwd_list.print();
+	return 0;
 }
+

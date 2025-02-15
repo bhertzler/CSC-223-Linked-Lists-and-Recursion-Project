@@ -1,4 +1,4 @@
-// SinglyLinkedList.h: this is the specification file for the SinglyLinkedList class.
+// SinglyLinkedList.h: this is the specification file and inline implementation for the SinglyLinkedList class.
 //
 
 // Benjamin Hertzler
@@ -14,8 +14,8 @@
 template<typename T>
 struct Node
 {
-	T data;				// Info field for the list element
-	Node* next;			// Link pointer for next element
+	T data{};				// Info field for the list element
+	Node* next;				// Link pointer for next element
 
 	// Constructors
 
@@ -29,7 +29,11 @@ template<typename T>
 class SinglyLinkedList
 {
 public:
+	
+	// Friend Classes
 
+	friend class SplitLinkedList;
+	
 	// Exception Classes
 
 	class EmptyListException
@@ -53,7 +57,7 @@ public:
 	// Default Constructor 
 	// Postcondition: Initializes head to nullptr
 	//
-	SinglyLinkedList() : head(nullptr) {}
+	SinglyLinkedList() : head(nullptr), tail(nullptr), size(0) {}
 
 	// Destructor
 	// Postcondition: Deletes all nodes
@@ -84,13 +88,14 @@ public:
 		p->next = nullptr;
 		if (head == nullptr)
 		{
-			head = p;
+			head = tail = p;
 		}
 		else
 		{
 			p->next = head;
 			head = p;
 		}
+		++size;
 	}
 
 	// Function to build a forward list.
@@ -106,48 +111,14 @@ public:
 		p->next = nullptr;
 		if (head == nullptr)
 		{
-			head = p;
+			head = tail = p;
 		}
 		else
 		{
-			Node<T>* prev = nullptr;
-			Node<T>* h = head;
-			while (h != nullptr)
-			{
-				prev = h;
-				h = h->next;
-			}
-			prev->next = p;
+			tail->next = p;
+			tail = p;
 		}
-	}
-
-	// Function to insert a node into the interior of the list.
-	// Precondition: The values of the node to insert after
-	// and the new node are supplied
-	// Postcondition: A new node is created and is added
-	// to the list after the node with the value supplied
-	// If the list is empty, or the supplied node is not found,
-	// an exception is thrown
-	//
-	void insertAfter(T afterValue, T newValue)
-		throw (EmptyListException, NodeNotFoundException)
-	{
-		Node<T>* a;
-		if (head == nullptr)
-			throw EmptyListException();
-		a = head;
-		while (a != nullptr && a->data != afterValue)
-			a = a->next;
-		if (a == nullptr)
-			throw NodeNotFoundException();
-		else
-		{
-			Node<T>* p;
-			p = new Node<T>;
-			p->data = newValue;
-			p->next = a->next;
-			a->next = p;
-		}
+		++size;
 	}
 
 	// Function to remove the first node with a specified value.
@@ -167,7 +138,10 @@ public:
 		{
 			p = head;
 			head = head->next;
+			if (head == nullptr)
+				tail = nullptr;
 			delete p;
+			--size;
 		}
 		else
 		{
@@ -181,19 +155,21 @@ public:
 			}
 			if (p == nullptr)
 				throw NodeNotFoundException();
-			else if (prev->next->next == nullptr)
+			else if (prev->next == tail)
 			{
-				q = prev->next;
+				q = tail;
 				prev->next = nullptr;
 				delete q;
+				tail = prev;
+				--size;
 			}
 			else
 			{
 				q = prev->next;
 				prev->next = prev->next->next;
 				delete q;
+				--size;
 			}
-
 		}
 	}
 
@@ -213,9 +189,14 @@ public:
 			std::cout << p->data << " -> ";
 			p = p->next;
 		}
-		std::cout << std::endl;
+		std::cout << "nullptr" << std::endl;
 	}
 
+	// Function to return the total number of elements in the list.
+	size_t length() const { return size; }
+
 private:
-	Node<T>* head;			// Pointer to first node.
+	Node<T>* head;			// Pointer to the first node
+	Node<T>* tail;			// Pointer to the last node
+	size_t size;			// Total number of elements in the list
 };
