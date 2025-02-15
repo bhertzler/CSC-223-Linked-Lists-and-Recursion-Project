@@ -25,12 +25,12 @@ int main()
 	bck_list.print();
 
 	// Delete first element
-	bck_list.deleteNode(10);
+	bck_list.deleteNode(50);
 	cout << "Delete the first node: " << endl;
 	bck_list.print();
 
 	// Delete last element
-	bck_list.deleteNode(50);
+	bck_list.deleteNode(10);
 	cout << "Delete the last node: " << endl;
 	bck_list.print();
 
