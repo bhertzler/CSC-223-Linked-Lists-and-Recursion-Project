@@ -30,10 +30,6 @@ class SinglyLinkedList
 {
 public:
 	
-	// Friend Classes
-
-	friend class SplitLinkedList;
-	
 	// Exception Classes
 
 	class EmptyListException
@@ -195,7 +191,7 @@ public:
 	// Function to return the total number of elements in the list.
 	size_t length() const { return size; }
 
-private:
+protected:
 	Node<T>* head;			// Pointer to the first node
 	Node<T>* tail;			// Pointer to the last node
 	size_t size;			// Total number of elements in the list

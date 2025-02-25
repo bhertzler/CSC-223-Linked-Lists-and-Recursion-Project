@@ -14,9 +14,7 @@ using namespace std;
 
 int main()
 {
-	SplitLinkedList list;
-	SinglyLinkedList<int> evens;
-	SinglyLinkedList<int> odds;
+	SplitLinkedList list, evens, odds;
 
 	string input;
 	cout << "Enter a list of integers, enter '.' to finish." << endl;
@@ -48,10 +46,17 @@ int main()
 	list.splitEvensOdds(evens, odds);
 
 	cout << "Evens List (" << evens.length() << " items): ";
-	evens.print();
-
-	cout << "Odds List(" << odds.length() << " items): ";
-	odds.print();
+	try { evens.print(); }
+	catch (SinglyLinkedList<int>::EmptyListException e)
+	{
+		cout << e.what() << endl;
+	}
+	cout << "Odds List (" << odds.length() << " items): ";
+	try { odds.print(); }
+	catch (SinglyLinkedList<int>::EmptyListException e)
+	{
+		cout << e.what() << endl;
+	}
 
 	cout << "List (" << list.length() << " items): ";
 	try { list.print(); }

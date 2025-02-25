@@ -7,20 +7,36 @@
 //
 
 #include "SplitLinkedList.h"
+#include <iostream>
+using namespace std;
 
-void SplitLinkedList::splitEvensOdds(SinglyLinkedList<int>& evenList, SinglyLinkedList<int>& oddList)
+void SplitLinkedList::splitEvensOdds(SplitLinkedList& evenList, SplitLinkedList& oddList)
 {
 	Node<int>* cursor = new Node<int>;
+	Node<int>* link = new Node<int>;
 	cursor = head;
 	while (cursor != nullptr)
 	{
+		link = cursor->next;
 		if (cursor->data % 2 == 0)
-			evenList.insertAtEnd(cursor->data);
+			moveNode(cursor, evenList);
 		else
-			oddList.insertAtEnd(cursor->data);
-		cursor = cursor->next;
+			moveNode(cursor, oddList);
+		cursor = link;
 	}
 	cleanup();
+}
+
+void SplitLinkedList::moveNode(Node<int>* current, SplitLinkedList& target_list)
+{
+	if (target_list.length() == 0)
+		target_list.head = current;
+	else
+		target_list.tail->next = current;
+	target_list.tail = current;
+	target_list.size++;
+	target_list.tail->next = nullptr;
+	current->next = nullptr;
 }
 
 void SplitLinkedList::cleanup()
